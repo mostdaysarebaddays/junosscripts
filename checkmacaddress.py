@@ -6,7 +6,7 @@ import getpass
 import os
 
 username = input("Username?: ")
-password = getpass.getpass(prompt="Password?: ")
+password = getpass.getpass(prompt="Password? (Password hidden from CLI for security purposes - please paste in if you're having trouble): ")
 devicelist = input("File containing list of network devices? (hosts.txt contains all Juniper devices if you'd like to change all): ")
 macaddress = input("MAC address you're looking for? (full or partial): ")
 outputtxt = input("Output file name? (filename of your choosing - this outputs to /home/python/output/): ")
