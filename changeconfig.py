@@ -56,9 +56,8 @@ def gethostname(device):
 
     device = ConnectHandler(**dev)
     device.enable()
-    device_commands = [ command,
-                        'commit']
-    hostname = device.send_config_set(device_commands)
+    hostname = device.send_config_set(command)
+    hostname += device.commit()
     return hostname
 
 if __name__ == '__main__':
@@ -69,4 +68,4 @@ if __name__ == '__main__':
     print('Time taken = {0:.5f}'.format(time.time() - start))
     print("%d devices opened" % len(open(devicelist).readlines()))
     open(outputinbetween).readlines()
-    print("%d devices successfully accessed" % lcount('commit confirmed', outputinbetween))
+    print("%d devices successfully accessed" % lcount('commit complete', outputinbetween))
