@@ -9,10 +9,16 @@ platform = 'juniper'
 username = input("Username?: ")
 password = getpass.getpass(prompt="Password? (Password hidden from CLI for security purposes - please paste in if you're having trouble): ")
 devicelist = input("File containing list of network devices? (hosts.txt contains all Juniper devices if you'd like to search all): ")
+print("\nUse as many lines of config as you need and hit enter to blank out any lines you don't need \n")
 command = input("Config to change? (line 1): ")
 command1 = input("Config to change? (line 2): ")
 command2 = input("Config to change? (line 3): ")
 command3 = input("Config to change? (line 4): ")
+command4 = input("Config to change? (line 5): ")
+command5 = input("Config to change? (line 6): ")
+command6 = input("Config to change? (line 7): ")
+command7 = input("Config to change? (line 8): ")
+
 outputtxt = input("Output file name? (filename of your choosing - this outputs to /home/python/output/): ")
 outputinbetween = os.path.join("/home/python/output/", outputtxt)
 outputwrite = open(outputinbetween, 'w', os.O_NONBLOCK)
@@ -30,7 +36,7 @@ except:
     raise
 
 def process(devices):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=25) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=200) as executor:
         hostname = {executor.submit(gethostname, device): device for device in devices}
         for future in concurrent.futures.as_completed(hostname):
             device = hostname[future]
@@ -39,8 +45,8 @@ def process(devices):
             except Exception as exc:
                 print('%r generated an exception: %s' % (device, exc))
             else:
-                print('[{}] {}'.format(device, data))
-                outputwrite.write('Device hostname: {} {}'.format(device, data))
+                print('Device: {} {}'.format(device, data))
+                outputwrite.write('Device: {} {}'.format(device, data))
 
 
 
@@ -64,7 +70,12 @@ def gethostname(device):
     device_commands = [ command,
                         command1,
                         command2,
-                        command3]
+                        command3,
+                        command4,
+                        command5,
+                        command6,
+                        command7 ]
+
     hostname = device.send_config_set(device_commands)
     hostname += device.commit()
     return hostname
