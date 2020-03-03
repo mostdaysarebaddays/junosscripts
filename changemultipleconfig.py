@@ -7,7 +7,7 @@ import os
 
 platform = 'juniper'
 username = input("Username?: ")
-password = getpass.getpass(prompt="Password?: ")
+password = getpass.getpass(prompt="Password? (Password hidden from CLI for security purposes - please paste in if you're having trouble): ")
 devicelist = input("File containing list of network devices? (hosts.txt contains all Juniper devices if you'd like to search all): ")
 command = input("Config to change? (line 1): ")
 command1 = input("Config to change? (line 2): ")
@@ -64,9 +64,9 @@ def gethostname(device):
     device_commands = [ command,
                         command1,
                         command2,
-                        command3,
-                        'commit']
+                        command3]
     hostname = device.send_config_set(device_commands)
+    hostname += device.commit()
     return hostname
 
 if __name__ == '__main__':
@@ -77,4 +77,4 @@ if __name__ == '__main__':
     print('Time taken = {0:.5f}'.format(time.time() - start))
     print("%d devices opened" % len(open(devicelist).readlines()))
     open(outputinbetween).readlines()
-    print("%d devices successfully accessed" % lcount('commit confirmed', outputinbetween))
+    print("%d devices config successfully changed" % lcount('commit complete', outputinbetween))
