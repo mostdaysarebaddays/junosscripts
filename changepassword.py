@@ -4,13 +4,14 @@ import argparse
 import time
 import getpass
 import os
+import logging
 
 platform = 'juniper'
 username = input("Username?: ")
-password = getpass.getpass(prompt="Password?: ")
+password = getpass.getpass(prompt="Password? (Password hidden from CLI for security purposes - please paste in if you're having trouble): ")
 devicelist = input("File containing list of network devices? (hosts.txt contains all Juniper devices if you'd like to change all): ")
-deviceusername = input("Username To Change?: ")
-devicepassword = input("New Password? (Encrypt your password to MD5 at https://www.md5online.org/ or it won't work): ")
+deviceusername = input("Username To Change On Device?: ")
+devicepassword = getpass.getpass(prompt="Password To Change On Device?? (Password hidden from CLI for security purposes - please paste in if you're having trouble): ")
 outputtxt = input("Output file name? (filename of your choosing - this outputs to /home/python/output/): ")
 outputinbetween = os.path.join("/home/python/output/", outputtxt)
 outputwrite = open(outputinbetween, 'w', os.O_NONBLOCK)
@@ -57,9 +58,15 @@ def gethostname(device):
 
     device = ConnectHandler(**dev)
     device.enable()
-    device_commands = [ 'set system login user ' + deviceusername + ' authentication encrypted-password $1$' + devicepassword,
-                        'commit']
-    hostname = device.send_config_set(device_commands)
+    device.config_mode()
+    device_commands = "set system login user " + deviceusername + " authentication plain-text-password"
+    hostname=device.send_command_timing(device_commands, strip_command=False, strip_prompt=False)
+    if "password" in hostname:
+        hostname+=device.send_command_timing(devicepassword, strip_command=False, strip_prompt=False)
+    if "password" in hostname:
+        hostname+=device.send_command_timing(devicepassword, strip_command=False, strip_prompt=False)
+    hostname+=device.commit()
+    device.exit_config_mode()
     return hostname
 
 if __name__ == '__main__':
@@ -70,4 +77,4 @@ if __name__ == '__main__':
     print('Time taken = {0:.5f}'.format(time.time() - start))
     print("%d devices opened" % len(open(devicelist).readlines()))
     open(outputinbetween).readlines()
-    print("%d devices successfully accessed" % lcount('Device:', outputinbetween))
+    print("%d passwords successfully changed" % lcount('commit complete', outputinbetween))
