@@ -57,7 +57,9 @@ def gethostname(device):
     device = ConnectHandler(**dev)
     device.enable()
     hostname = device.send_config_set(command)
-    hostname += device.commit()
+    hostname+=device.commit(confirm=True, confirm_delay=5)
+    time.sleep(30)
+    hostname+=device.commit()
     return hostname
 
 if __name__ == '__main__':
