@@ -4,7 +4,6 @@ import argparse
 import time
 import getpass
 import os
-import time
 
 platform = 'juniper'
 username = input("Username?: ")
@@ -61,9 +60,6 @@ def gethostname(device):
     device = ConnectHandler(**dev)
     device.enable()
     hostname = device.send_command(command)
-    hostname+=device.commit(confirm=True, confirm_delay=5)
-    time.sleep(30)
-    hostname+=device.commit()
     return hostname
 
 
