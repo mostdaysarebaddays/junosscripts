@@ -65,8 +65,9 @@ def gethostname(device):
         hostname+=device.send_command_timing(devicepassword, strip_command=False, strip_prompt=False)
     if "password" in hostname:
         hostname+=device.send_command_timing(devicepassword, strip_command=False, strip_prompt=False)
+    hostname+=device.commit(confirm=True, confirm_delay=5)
+    time.sleep(30)
     hostname+=device.commit()
-    device.exit_config_mode()
     return hostname
 
 if __name__ == '__main__':
