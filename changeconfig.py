@@ -4,6 +4,7 @@ import argparse
 import time
 import getpass
 import os
+import time
 
 platform = 'juniper'
 username = input("Username?: ")
