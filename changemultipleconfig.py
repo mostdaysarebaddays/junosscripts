@@ -76,8 +76,9 @@ def gethostname(device):
                         command6,
                         command7 ]
 
-    hostname = device.send_config_set(device_commands)
-    hostname += device.commit()
+    hostname+=device.commit(confirm=True, confirm_delay=5)
+    time.sleep(30)
+    hostname+=device.commit()
     return hostname
 
 if __name__ == '__main__':
