@@ -67,7 +67,7 @@ def gethostname(device):
         hostname+=device.send_command_timing(devicepassword, strip_command=False, strip_prompt=False)
     hostname+=device.commit(confirm=True, confirm_delay=5)
     time.sleep(30)
-    hostname+=device.commit()
+    hostname+=device.commit(check=True)
     return hostname
 
 if __name__ == '__main__':
